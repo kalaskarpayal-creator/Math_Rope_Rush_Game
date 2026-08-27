@@ -1,0 +1,794 @@
+﻿<%@ Master Language="VB" AutoEventWireup="false" CodeBehind="Site.Master.vb"     Inherits="Math_Rope_Rush.SiteMaster" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+      <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+   <style>
+        /* =========================================================
+           GLOBAL
+        ========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        button,
+        input,
+        select {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* =========================================================
+           MAIN WEBSITE WRAPPER
+        ========================================================= */
+
+        .site-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: radial-gradient(circle at top left, rgba(255, 214, 102, 0.20), transparent 30%), radial-gradient(circle at bottom right, rgba(83, 177, 255, 0.18), transparent 30%), #f5f8ff;
+        }
+
+
+        /* =========================================================
+           TOP HEADER
+        ========================================================= */
+
+        .main-header {
+            width: 100%;
+            min-height: 95px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 35px;
+            background: linear-gradient( 135deg, #4facfe 0%, #2386e8 50%, #1559b8 100% );
+            box-shadow: 0 5px 20px rgba(0, 74, 150, 0.20);
+            position: relative;
+            z-index: 10;
+        }
+
+
+        /* =========================================================
+           LOGO
+        ========================================================= */
+
+        .game-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            font-size: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+
+        .logo-title {
+            color: #ffffff;
+            font-size: 25px;
+            font-weight: 800;
+        }
+
+        .logo-subtitle {
+            color: rgba(255,255,255,0.88);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+
+        /* =========================================================
+           HEADER BUTTON
+        ========================================================= */
+
+        .header-action {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-btn {
+            border: none;
+            padding: 10px 18px;
+            border-radius: 30px;
+            background: #ffffff;
+            color: #1769c2;
+            font-size: 15px;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+            transition: 0.25s ease;
+        }
+
+            .header-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 7px 15px rgba(0,0,0,0.18);
+            }
+
+
+        /* =========================================================
+           PAGE CONTAINER
+        ========================================================= */
+
+        .page-container {
+            width: 100%;
+            max-width: 1450px;
+            margin: 0 auto;
+            padding: 25px;
+            flex: 1;
+        }
+
+
+        /* =========================================================
+           GAME TITLE
+        ========================================================= */
+
+        .game-title-area {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .game-main-title {
+            font-size: 38px;
+            font-weight: 800;
+            color: #185ca8;
+            line-height: 1.1;
+        }
+
+        .game-round {
+            display: inline-flex;
+            margin-top: 8px;
+            padding: 5px 18px;
+            border-radius: 30px;
+            background: #ffffff;
+            color: #e87900;
+            font-size: 16px;
+            font-weight: 700;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+
+        /* =========================================================
+           GAME BOARD
+        ========================================================= */
+
+        .game-board {
+            width: 100%;
+            display: grid;
+            grid-template-columns: minmax(280px, 1fr) minmax(250px, 2.15fr) minmax(280px, 1fr);
+            gap: 15px;
+            padding: 18px;
+            border-radius: 28px;
+            background: rgba(255,255,255,0.92);
+            box-shadow: 0 12px 35px rgba(25, 75, 130, 0.13);
+            border: 2px solid rgba(255,255,255,0.9);
+            overflow: hidden;
+        }
+
+
+        /* =========================================================
+           TEAM AREA
+        ========================================================= */
+
+        .team-panel {
+            min-height: 560px;
+            width: 480px;
+            padding: 20px;
+            border-radius: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+
+        /* BLUE TEAM */
+
+        .team-blue {
+            background: linear-gradient( 145deg, #e8f5ff, #d5ecff );
+            border: 30px solid #55aef5;
+        }
+
+
+        /* RED TEAM */
+
+        .team-red {
+            background: linear-gradient( 145deg, #fff0f0, #ffe0e0 );
+            border: 30px solid #f46b6b;
+        }
+
+
+        /* =========================================================
+           TEAM HEADER
+        ========================================================= */
+
+        .team-header {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .team-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .team-blue .team-name {
+            color: #1475ce;
+        }
+
+        .team-red .team-name {
+            color: #e23838;
+        }
+
+
+        /* =========================================================
+           SCORE
+        ========================================================= */
+
+        .score-box {
+            min-width: 75px;
+            padding: 7px 12px;
+            border-radius: 20px;
+            background: #ffffff;
+            text-align: center;
+            font-size: 17px;
+            font-weight: 800;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.10);
+        }
+
+
+        /* =========================================================
+           QUESTION CARD
+        ========================================================= */
+
+        .question-card {
+            width: 100%;
+            padding: 22px 15px;
+            border-radius: 18px;
+            background: #ffffff;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 18px;
+        }
+
+        .question-label {
+            font-size: 14px;
+            color: #7c8794;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .question-text {
+            font-size: 34px;
+            font-weight: 800;
+            color: #263238;
+            letter-spacing: 1px;
+        }
+
+
+        /* =========================================================
+           ANSWER BUTTONS
+        ========================================================= */
+
+        .answer-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .answer-btn {
+            border: none;
+            min-height: 55px;
+            border-radius: 14px;
+            background: #ffffff;
+            color: #263238;
+            font-size: 20px;
+            font-weight: 700;
+            border: 2px solid #e1e8ef;
+            box-shadow: 0 3px 7px rgba(0,0,0,0.06);
+            transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+        }
+
+            .answer-btn:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 7px 14px rgba(0,0,0,0.12);
+            }
+
+        .team-blue .answer-btn:hover {
+            background: #e7f5ff;
+            border-color: #4da9f4;
+            color: #126fc5;
+        }
+
+        .team-red .answer-btn:hover {
+            background: #fff0f0;
+            border-color: #ed6666;
+            color: #d93131;
+        }
+
+
+        /* =========================================================
+           PLAYERS
+        ========================================================= */
+
+        .players-area {
+            width: 100%;
+            flex: 1;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 15px;
+            padding-top: 15px;
+        }
+
+        .player {
+            font-size: 75px;
+            line-height: 1;
+            user-select: none;
+            filter: drop-shadow(0 5px 4px rgba(0,0,0,0.15));
+            transition: transform 0.4s ease;
+        }
+
+            .player:hover {
+                transform: translateY(-8px);
+            }
+
+
+        /* =========================================================
+           CENTER ROPE AREA
+        ========================================================= */
+
+        .battle-area {
+            min-height: 560px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 0;
+        }
+
+
+        /* =========================================================
+           CENTER LABEL
+        ========================================================= */
+
+        .battle-label {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 6px 18px;
+            border-radius: 30px;
+            background: #ffffff;
+            color: #65727f;
+            font-size: 13px;
+            font-weight: 700;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            white-space: nowrap;
+        }
+
+
+        /* =========================================================
+           ROPE
+        ========================================================= */
+
+        .rope-stage {
+            width: 100%;
+            height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .rope {
+            width: 100%;
+            height: 15px;
+            border-radius: 20px;
+            background: repeating-linear-gradient( 45deg, #b4773b 0px, #b4773b 8px, #d49a5b 8px, #d49a5b 16px );
+            box-shadow: 0 4px 7px rgba(0,0,0,0.20);
+            position: relative;
+        }
+
+
+        /* =========================================================
+           ROPE CENTER KNOT
+        ========================================================= */
+
+        .rope-knot {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: #ffca28;
+            border: 4px solid #ffffff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+            z-index: 3;
+        }
+
+
+        /* =========================================================
+           BATTLE MARKERS
+        ========================================================= */
+
+        .battle-line {
+            position: absolute;
+            left: 50%;
+            top: 15%;
+            width: 3px;
+            height: 70%;
+            transform: translateX(-50%);
+            background: repeating-linear-gradient( to bottom, #b6c1cc 0px, #b6c1cc 8px, transparent 8px, transparent 16px );
+        }
+
+
+        /* =========================================================
+           CENTER ICON
+        ========================================================= */
+
+        .battle-icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+            animation: battleBounce 2s infinite ease-in-out;
+        }
+
+        @keyframes battleBounce {
+
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+
+        /* =========================================================
+           STATUS MESSAGE
+        ========================================================= */
+
+        .game-status {
+            min-height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 20px;
+            border-radius: 30px;
+            background: #ffffff;
+            color: #53606c;
+            font-size: 15px;
+            font-weight: 700;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+
+        /* =========================================================
+           WINNER / SUCCESS
+        ========================================================= */
+
+        .winner-message {
+            display: none;
+            padding: 12px 25px;
+            border-radius: 20px;
+            background: linear-gradient( 135deg, #fff3a6, #ffd45c );
+            color: #754d00;
+            font-size: 22px;
+            font-weight: 800;
+            box-shadow: 0 6px 15px rgba(214,160,0,0.20);
+        }
+
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        .main-footer {
+            width: 100%;
+            padding: 15px;
+            text-align: center;
+            color: #71808d;
+            font-size: 13px;
+            background: rgba(255,255,255,0.75);
+            border-top: 1px solid #e3e9ef;
+        }
+
+
+        /* =========================================================
+           COMMON CARD
+        ========================================================= */
+
+        .game-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 7px 20px rgba(0,0,0,0.08);
+        }
+
+
+        /* =========================================================
+           PRIMARY BUTTON
+        ========================================================= */
+
+        .primary-btn {
+            border: none;
+            padding: 12px 28px;
+            border-radius: 30px;
+            background: linear-gradient( 135deg, #4facfe, #1769c2 );
+            color: #ffffff;
+            font-size: 17px;
+            font-weight: 800;
+            box-shadow: 0 5px 12px rgba(23,105,194,0.25);
+            transition: 0.25s ease;
+        }
+
+            .primary-btn:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 8px 18px rgba(23,105,194,0.32);
+            }
+
+
+        /* =========================================================
+           RESPONSIVE — TABLET
+        ========================================================= */
+
+        @media (max-width: 1000px) {
+
+            .main-header {
+                padding: 12px 20px;
+            }
+
+            .game-board {
+                grid-template-columns: 1fr 0.8fr 1fr;
+                padding: 12px;
+            }
+
+            .team-panel,
+            .battle-area {
+                min-height: 500px;
+            }
+
+            .player {
+                font-size: 58px;
+            }
+
+            .question-text {
+                font-size: 28px;
+            }
+        }
+
+
+        /* =========================================================
+           RESPONSIVE — MOBILE
+        ========================================================= */
+
+        @media (max-width: 700px) {
+
+            .main-header {
+                min-height: 75px;
+                padding: 10px 15px;
+            }
+
+            .logo-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 23px;
+            }
+
+            .logo-title {
+                font-size: 19px;
+            }
+
+            .logo-subtitle {
+                font-size: 11px;
+            }
+
+            .header-btn {
+                padding: 8px 13px;
+                font-size: 13px;
+            }
+
+            .page-container {
+                padding: 12px;
+            }
+
+            .game-main-title {
+                font-size: 29px;
+            }
+
+            .game-board {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                padding: 10px;
+                border-radius: 20px;
+            }
+
+            .team-panel {
+                min-height: auto;
+                padding: 15px;
+            }
+
+            .battle-area {
+                min-height: 250px;
+                order: 2;
+            }
+
+            .team-blue {
+                order: 1;
+            }
+
+            .team-red {
+                order: 3;
+            }
+
+            .rope-stage {
+                height: 100px;
+            }
+
+            .battle-line {
+                display: none;
+            }
+
+            .battle-icon {
+                font-size: 38px;
+                margin-bottom: 8px;
+            }
+
+            .player {
+                font-size: 48px;
+            }
+
+            .question-text {
+                font-size: 27px;
+            }
+
+            .answer-btn {
+                min-height: 48px;
+                font-size: 18px;
+            }
+        }
+
+
+        /* =========================================================
+           VERY SMALL MOBILE
+        ========================================================= */
+
+        @media (max-width: 400px) {
+
+            .logo-subtitle {
+                display: none;
+            }
+
+            .logo-title {
+                font-size: 17px;
+            }
+
+            .game-main-title {
+                font-size: 25px;
+            }
+
+            .player {
+                font-size: 40px;
+            }
+
+            .question-text {
+                font-size: 24px;
+            }
+        }
+    </style>
+
+    <!-- Page-specific Head Content -->
+      <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+
+</head>
+<body>
+
+<form runat="server">
+
+    <div class="site-wrapper">
+
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
+
+        <header class="main-header">
+
+            <div class="game-logo">
+
+                <div class="logo-icon">
+                    🧠
+                </div>
+
+                <div class="logo-text">
+
+                    <div class="logo-title">
+                        Math Tug Battle
+                    </div>
+
+                    <div class="logo-subtitle">
+                        Think • Solve • Pull • Win!
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="header-action">
+
+                <asp:Button ID="btnHome" runat="server" Text="🏠 Home" CssClass="header-btn" PostBackUrl="~/Home.aspx" />
+
+            </div>
+
+        </header>
+
+
+
+
+        <!-- =====================================================
+             FOOTER
+        ====================================================== -->
+
+        <footer class="main-footer">
+
+            🧠 Math Tug Battle
+            <br />
+
+            Learn • Play • Have Fun! 🎮
+
+        </footer>
+             <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
+  
+    </div>
+
+
+    </form>
+ 
+</body>
+
+</html>
